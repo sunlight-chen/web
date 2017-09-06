@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+     margin:0;
+      padding: 0;
+    }
+    #header{
+      width:1000px;
+      height:150px;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: yellow;
+    }
+    #nav li {
+      float: left;
+      list-style: none;
+      background-color: gold;
+      padding: 15px 34px;
+      color: white;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    #nav li:hover{
+      background-color: orange;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: #cccccc;
+    }
+    #username{
+      display: inline-block;
+      margin-top: 20px;
+    }
+    span {
+      display: none;
+    }
+    .right {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    .tips{
+      display: inline-block;
+    }
+    #box{
+      width: 1000px;
+      height: 550px;
+      margin: 0 auto;
+  overflow: hidden;
+      background: #e4e4e4;
+    }
+    img{
+      width: 150px;
+      height: 200px;
+     margin: 10px 25px 0 25px;
+    }
+    #hot li{
+      float:left;
+      list-style: none;
+      height: 250px;
+      text-align: center;
+    }
+    h2{
+      margin-left: 25px;
+    }
+    b{display: block}
+    .arc{
+      width: 150px ;
+      height: 100px;
+      position: absolute;
+      margin-left: 25px;
+      margin-top: 110px;
+      background: rgba(252,102,33,0.9);
+      color: white;
+      display: none;
+    }
+   #hot li:hover .arc{display:block}
+  </style>
+</head>
+<body>
+<div id="header">
+  <ul id="nav"></ul>
+ <div class="tips l">用户名</div><input type="text" placeholder="请输入用户名" id="username">
+  <span></span>
+</div>
+<div id="box">
+  <h2>热门商品</h2>
+  <ul id="hot"></ul>
+</div>
+<script src="myajax.js" charset="utf-8"></script>
+<script>
+  var oUl = document.querySelector("#nav");
+  myajax.get('http://h6.duchengjiu.top/shop/api_cat.php', {}, function(error, responseText){
+    var json = JSON.parse(responseText);//返回的整个json对象
+    var data = json.data;//json对象当中的data是一个数组
+
+    for (var i = 0; i < data.length; i++) {
+      var obj = data[i];//数组里面的每一项是一个商品分类的对象
+      oUl.innerHTML += '<li><a href="#">' + obj.cat_name + '</a></li>';}
+  });
+  var oInput = document.querySelector('input');
+  var oSpan = document.querySelector('span');
+  oInput.onblur = function() {
+    myajax.post('http://h6.duchengjiu.top/shop/api_user.php',
+        {status: 'check', username: oInput.value},
+        function(error, responseText) {
+          var json = JSON.parse(responseText);
+          oSpan.innerText = json.message;
+          oSpan.style.display = 'block';
+          if (json.code === 0) {
+            oSpan.className = "right";
+          } else {
+            oSpan.className = "error";
+          }
+        });
+  };
+  var oul = document.querySelector("#hot");
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function () {
+    if(xhr.readyState===xhr.DONE){
+      try{
+        var json = JSON.parse(xhr.responseText);
+        var data = json.data;
+        for(var i=0;i<data.length;i++){
+          var obj = data[i];
+      var oimg=document.createElement("img");
+      var oli=document.createElement("li");
+      var ob=document.createElement("b");
+      var odiv=document.createElement("div");
+      oimg.src=obj.goods_thumb;
+      ob.innerText=obj.price+"￥";
+      odiv.innerText=obj.goods_name;
+      odiv.className="arc";
+      oli.appendChild(odiv);
+      oli.appendChild(oimg);
+      oli.appendChild(ob);
+      oul.appendChild(oli);
+        }
+      }catch (error){
+
+      }
+    }
+  };
+  xhr.open("get","http://h6.duchengjiu.top/shop/api_goods.php");
+  xhr.send();
+</script>
+</body>
+</html>
