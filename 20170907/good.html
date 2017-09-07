@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+      margin:0;
+      padding: 0;
+    }
+    #header{
+      width:1000px;
+      height:50px;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: yellow;
+    }
+    #nav li{
+      float: left;
+      list-style: none;
+      background-color: orangered;
+      padding: 15px 34px;
+      color: white;
+    }
+    #nav a{
+      text-decoration: none;
+      color: white;
+    }
+    #nav li:hover{
+      background-color: gold;
+    }
+    #nav a:hover {
+      color: black;
+    }
+    #box{
+      width: 1000px;
+      height: 750px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: orange;
+    }
+    img{
+      width: 150px;
+      height: 200px;
+    }
+    #hot-goods li{
+      width: 150px;
+      float:left;
+      list-style: none;
+      height:300px;
+      overflow: hidden;
+      position: relative;
+      margin: 20px 25px 10px 25px;
+      background-color: gold;
+    }
+    #hot-goods li:hover{
+      background-color:orangered ;
+    }
+    #hot-goods li a{
+      color: black;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    #hot-goods li a:hover{
+      color: white;
+    }
+    #hot-goods li:hover .price{ color: white;}
+    .price{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 18px;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <ul id="nav"></ul>
+</div>
+<div id="box">
+<ul id="hot-goods"></ul></div>
+<script src="myajax.js"></script>
+<script>
+  var oUl = document.querySelector("#nav");
+  myajax.get('http://h6.duchengjiu.top/shop/api_cat.php', {}, function(error, responseText){
+    var json = JSON.parse(responseText);//返回的整个json对象
+    var data = json.data;//json对象当中的data是一个数组
+
+    for (var i = 0; i < data.length; i++) {
+      var obj = data[i];//数组里面的每一项是一个商品分类的对象
+      oUl.innerHTML += '<li><a href="#">' + obj.cat_name + '</a></li>';}
+  });
+ var cat_id = getQueryString("cat_id");
+  var oGoods = document.querySelector("#hot-goods");
+  myajax.get("http://h6.duchengjiu.top/shop/api_goods.php",{cat_id:cat_id},function (err,responseText) {
+        var json = JSON.parse(responseText);
+        var data = json.data;
+        for (i=0;i<data.length;i++){
+          var obj = data[i];
+          oGoods.innerHTML+=`<li><a href="商品详情.html?goods_id=${obj.goods_id}"><div><img src="${obj.goods_thumb}"></div><div>${obj.goods_name}</div><div class="price">${obj.price}</div></a></li>`;
+        }
+      });
+</script>
+</body>
+</html>

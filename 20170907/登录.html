@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+  *{
+  margin: 0;
+  padding: 0;
+  }
+  body{background: url("sky.jpg") no-repeat}
+  #box{
+  width: 600px;
+  height: 400px;
+  background: darkorange;
+  margin: 100px auto;
+  border-radius: 50px;
+  }
+  .r{
+  margin-left: 105px;
+  }
+  input{
+  width: 300px;
+  height: 30px;
+  margin-top: 70px;
+  }
+  #btn{margin-left: 105px;width: 370px;height: 50px;font-size: 20px}
+  </style>
+</head>
+<body>
+<div id="box">
+  <label class="r">用户名：<input type="text" name="username" placeholder="请输入用户名"></label><br>
+  <label class="r">密码： &nbsp;&nbsp;&nbsp;<input type="password" name="password" placeholder="请输入密码"></label><br>
+  <input type="submit" value="登录" id="btn"></div>
+<script src="myajax.js" charset="utf-8"></script>
+<script>
+  var oUsername = document.querySelector('input[name=username]');
+  var oPassword = document.querySelector('input[name=password]');
+  var oBtn = document.querySelector('input[type=submit]');
+  oBtn.onclick = function() {
+    myajax.post('http://h6.duchengjiu.top/shop/api_user.php',
+        {
+          status: 'login',
+          username: oUsername.value,
+          password: oPassword.value
+        }, function(error, responseText){
+          var json = JSON.parse(responseText);
+          console.log(json);
+          localStorage.token = json.data.token;
+          localStorage.username = json.data.username;
+         alert(json.message);
+          if (json.message==="登录成功"){
+            location.href="商品列表.html";
+          }
+        });
+  }
+</script>
+</body>
+</html>

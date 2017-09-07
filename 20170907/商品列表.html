@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+      margin:0;
+      padding: 0;
+    }
+    #header{
+      width:1000px;
+      height:100px;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: yellow;
+    }
+    #cat li {
+      float: left;
+      list-style: none;
+      background-color: orangered;
+      padding: 15px 34px;
+      color: white;
+      margin-top: 27px;
+    }
+    #cat li a{
+      text-decoration: none;
+      color: white;
+    }
+    #cat li:hover{
+      background-color: gold;
+    }
+    #cat li a:hover {
+      color: black;
+    }
+    #box{
+      width: 1000px;
+      height: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: orange;
+    }
+    img{
+      width: 150px;
+      height: 200px;
+    }
+    #hot-goods li{
+      width: 150px;
+      float:left;
+      list-style: none;
+      height:300px;
+      overflow: hidden;
+      position: relative;
+      margin: 20px 25px 10px 25px;
+      background-color: gold;
+    }
+    #hot-goods li a{
+      color: black;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    #hot-goods li:hover{
+      background-color:orangered ;
+    }
+    #hot-goods li:hover .price{ color: white;}
+    h2{
+      margin: 20px 0 10px 25px;
+    }
+    .price{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 18px;
+      color: red;
+    }
+    .b{display: inline-block;
+     text-decoration: none;
+     padding: 0 5px;
+      font-size: 20px;
+      color: black;
+    }
+    .b:hover{background-color: gold;color: white}
+    #search{float: right;
+      margin-right: 10px;height: 20px}
+  </style>
+</head>
+<body>
+<script src="myajax.js"></script>
+<div id="header">
+  <a href="用户注册.html" class="b">注册</a>
+  <a href="登录.html" class="b">登录</a>
+  <a href="购物车.html" class="b">购物车</a>
+  <input id="search" type="text" placeholder="请输入要搜索的内容">
+<ul id="cat"></ul></div>
+<div id="box">
+  <h2>热门商品</h2>
+<ul id="hot-goods"></ul>
+</div>
+<script>
+  var oCat = document.querySelector("#cat");
+  myajax.get("http://h6.duchengjiu.top/shop/api_cat.php",{},function (error,responseText) {
+    var json =JSON.parse(responseText);
+    var data = json.data;
+    for (var i=0;i<data.length;i++){
+      var obj = data[i];
+      oCat.innerHTML+=`<li><a href="good.html?cat_id=${obj.cat_id}">${obj.cat_name}</a></li> `
+    }
+  });
+  var oGoods = document.querySelector('#hot-goods');
+  myajax.get('http://h6.duchengjiu.top/shop/api_goods.php', {}, function(err,responseText){
+    var json = JSON.parse(responseText);
+    console.log(json);
+    var data = json.data;
+    for (var i = 0; i < data.length; i++) {
+      var obj = data[i];
+      oGoods.innerHTML += `<li><a href="08-goods.html?goods_id=${obj.goods_id}">
+          <div><img src="${obj.goods_thumb}" /></div>
+          <div>${obj.goods_name}</div>
+          <div class="price">${obj.price}￥</div></a>
+        </li>`;
+    }
+  });
+var oSearch = document.querySelector("#search");
+oSearch.onblur=function () {
+  location.href="搜索.html?search_text="+oSearch.value;
+}
+</script>
+</body>
+</html>
