@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #b{
+      width: 1300px;
+      height: 830px;
+      overflow: hidden;
+      margin: 0 auto;
+      position: relative;
+    }
+    li {
+      list-style: none;
+      float: left;
+      width: 240px;
+      height: 415px;
+      margin-left: 15px;
+    }
+    .box img{
+      width: 240px;
+      height: 300px;
+    }
+    input{
+      width: 40px;
+      height: 20px;
+    }
+    #hot-goods{
+      width: 1300px;
+      position: absolute;
+      top:1px;
+    }
+    #btn{
+      width: 300px;
+      height: 30px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+<div id="b">
+  <div id="hot-goods"></div>
+</div>
+<div id="btn"><button id="btnleft">上一页</button><input type="text" value="1"/><button id="btnright">下一页</button></div>
+<script src="jquery-3.2.1.js"></script>
+<script src="underscore.js"></script>
+<script>
+  var page=1;
+  var pagesize=10;
+  function getpage() {
+    $.get('http://h6.duchengjiu.top/shop/api_goods.php',{page, pagesize},function (json) {
+      var template = "<li><div class='box'> <img src=<%= goods_thumb %> /> </div> <div> <%= goods_name %> </div> <div> <%= price %> </div></li>";
+      var compile = _.template(template);
+      for (var i = 0; i < json.data.length; i++) {
+        var data = json.data[i];
+        $('#hot-goods').html($('#hot-goods').html()+compile(data));
+      }
+    });
+  }
+  getpage();
+  var ohot = document.querySelector("#hot-goods");
+  var sum=0;
+  var oinput = document.querySelector('input');
+  $('#btnleft').click(function () {
+    getpage(--page);
+    sum=page-1;
+    ohot.style.top=-sum*830+"px";
+    if (ohot.style.top<0){
+      ohot.style.top=0+"px";
+    }
+    oinput.value=parseInt(oinput.value)-1;
+    if (oinput.value<=0){
+      oinput.value=1;
+    }
+  });
+  $('#btnright').click(function () {
+    getpage(++page);
+    sum=page-1;
+    ohot.style.top=-sum*830+"px";
+    oinput.value=parseInt(oinput.value)+1;
+  });
+</script>
+</body>
+</html>
