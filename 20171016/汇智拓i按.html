@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    canvas{
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+<canvas width="500" height="600"></canvas>
+<script>
+  var canvas = document.querySelector("canvas");
+  var ctx = canvas.getContext("2d");
+  var img = new Image();
+  img.src = "bg-7.jpg";
+  img.onload = function () {
+    var x = 100;
+    var y = 100;
+    setInterval(function () {
+      ctx.clearRect(0,0,600,600);
+      x+=1;
+      y+=1;
+      ctx.drawImage(img,0,0,600,600,x,y,300,400);
+    },30);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+<style>
+  canvas{
+    border: 1px solid red;
+  }
+</style>
+</head>
+<body>
+<canvas width="500" height="600"></canvas>
+<script>
+  var canvas = document.querySelector("canvas");
+  var ctx = canvas.getContext("2d");
+  var img = new Image();
+  img.src = "bg-7.jpg";
+  img.onload = function () {
+      ctx.drawImage(img,0,0,600,600,10,10,300,400);
+  };
+  canvas.addEventListener('click',function (event) {
+    event = event || window.event;
+    console.log(event);
+    if(event.offsetX > 100 && event.offsetX < 190 && event.offsetY > 100 && event.offsetY < 200){
+      console.log("click");
+    }
+  })
+</script>
+</body>
+</html>

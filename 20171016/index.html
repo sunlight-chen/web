@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<canvas width="500" height="500"></canvas>
+<script>
+  var canvas = document.querySelector("canvas");
+  var ctx = canvas.getContext("2d");
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(100,100,200,40);
+  ctx.fillStyle = "blue";
+  ctx.fillRect(100,200,50,50);
+</script>
+</body>
+</html>

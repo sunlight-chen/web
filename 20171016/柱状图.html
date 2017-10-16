@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<canvas width="1000" height="600"></canvas>
+<script>
+  var canvas = document.querySelector("canvas");
+  var ctx = canvas.getContext("2d");
+  var arr = [60,90,150,130,170,190,125,175,155,165,155,145];
+
+  //定义一个画线的函数方法    画两条线
+  function line(aX,aY,bX,bY) {//开始和结束的横坐标  开始和结束的纵坐标
+    ctx.beginPath();
+    ctx.moveTo(aX,aY);
+    ctx.lineTo(bX,bY);
+    ctx.stroke();
+  }
+  line(300,80,300,480);
+  line(900,80,900,480);
+
+  //用for循环 画11条线   利用上面line的画线方法
+  for(var i=0;i<11;i++){
+    //300,80,900,80
+    //300,120,900,120
+    line(300,80+i*40,900,80+i*40);
+    write(200-i*20,280,80+i*40)
+
+  }
+  //定义一个矩形的函数方法
+  function rect(X,Y,width,height) {
+    ctx.beginPath();
+    ctx.fillStyle="#abcdef";
+    ctx.rect(X,Y,width,height);
+    ctx.fill();
+    ctx.closePath()
+  }
+
+  //定义一个方法  定义矩形的具体变量以及高引入数组
+  function wenrect() {
+    for(var i=0;i<12;i++){
+      var width=30;
+      var height=arr[i]*2;
+      var X=310+i*40+i*10;
+      var Y=480-height;
+      rect(X,Y,width,height);
+      write((i+1)+"月",320+i*40+i*10,500)
+    }
+  }
+  wenrect();
+
+  //添加字
+  function write(start,ox,oy) {
+    ctx.beginPath();
+    ctx.fillStyle = "black";
+    ctx.fillText(start,ox,oy);
+    ctx.closePath();
+  }
+</script>
+</body>
+</html>
